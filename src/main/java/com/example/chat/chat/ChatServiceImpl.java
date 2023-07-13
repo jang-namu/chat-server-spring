@@ -88,5 +88,7 @@ public class ChatServiceImpl {
                 .build();
     }
 
-
+    public void delete(Long chatId) {
+        chatRepository.deleteById(chatId);
+    }
 }
