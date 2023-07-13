@@ -1,6 +1,5 @@
 package com.example.chat.chat;
 
-import com.example.chat.group.Group;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,5 +21,5 @@ public class ChatResponseDto {
 
     private LocalDateTime genTime;
 
-    private Date endDate;
+    private Date endDate;   // Date
 }

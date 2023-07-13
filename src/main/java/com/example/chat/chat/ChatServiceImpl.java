@@ -3,7 +3,6 @@ package com.example.chat.chat;
 import com.example.chat.group.Group;
 import com.example.chat.group.GroupRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -71,4 +70,23 @@ public class ChatServiceImpl {
         }
         return chatResponseDtoList;
     }
+
+    public ChatResponseDto saveChat(ChatRequestDto chatRequestDto) {
+        Chat chat = Chat.builder()
+                .message(chatRequestDto.getMessage())
+                .group(chatRequestDto.getGroup())
+                .build();
+
+        Chat saveChat = chatRepository.save(chat);
+
+        return ChatResponseDto.builder()
+                .id(saveChat.getId())
+                .message(saveChat.getMessage())
+                .gid(saveChat.getGroup().getId())
+                .genTime(saveChat.getGenTime())
+                .endDate(saveChat.getEndDate())
+                .build();
+    }
+
+
 }

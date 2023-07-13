@@ -47,12 +47,12 @@ public class UserServiceImpl implements UserService {
                 .email(userRequestDto.getEmail())
                 .build();
 
-        User responseUser = userRepository.save(user);
+        User savedUser = userRepository.save(user);
 
         return UserResponseDto.builder()
-                .id(responseUser.getId())
-                .name(responseUser.getName())
-                .email(responseUser.getEmail())
+                .id(savedUser.getId())
+                .name(savedUser.getName())
+                .email(savedUser.getEmail())
                 .build();
     }
 
