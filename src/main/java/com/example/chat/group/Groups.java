@@ -2,24 +2,28 @@ package com.example.chat.group;
 
 import com.example.chat.chatroom.ChatRoom;
 import com.example.chat.user.User;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Table(name = "group_tb")
 @Entity
 @Getter
-public class Group {
+@NoArgsConstructor
+@AllArgsConstructor
+public class Groups {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "uid")
     private User user;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "roomId")
     private ChatRoom chatRoom;
 }

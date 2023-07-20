@@ -1,5 +1,4 @@
-package com.example.chat.user;
-
+package com.example.chat.permission.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,8 +9,8 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserResponseDto {
-    private Long id;
-    private String name;
-    private String email;
+public class PermissionResponseDto {
+    private Long gid;
+
+    private Byte state;
 }

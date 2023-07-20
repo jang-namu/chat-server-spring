@@ -1,5 +1,7 @@
 package com.example.chat.user;
 
+import com.example.chat.user.dto.UserRequestDto;
+import com.example.chat.user.dto.UserResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

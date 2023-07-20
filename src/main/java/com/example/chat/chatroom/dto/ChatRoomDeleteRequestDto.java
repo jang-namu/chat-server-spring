@@ -1,4 +1,4 @@
-package com.example.chat.user;
+package com.example.chat.chatroom.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,8 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserRequestDto {
-    private String name;
-    private String email;
+public class ChatRoomDeleteRequestDto {
+    private Long id;
+
+    private Long adminId;
 }

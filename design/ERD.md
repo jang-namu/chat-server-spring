@@ -1,1 +1,3 @@
-![ChatERD.png](ERD.md)
+# 채팅서버 ERD
+
+![ChatERD.png](ChatERD.png)
