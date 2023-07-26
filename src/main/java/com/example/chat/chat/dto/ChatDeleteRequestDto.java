@@ -1,6 +1,5 @@
 package com.example.chat.chat.dto;
 
-import com.example.chat.group.Groups;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,8 +13,5 @@ public class ChatDeleteRequestDto {
 
     private Long id;
 
-    private Groups groups;
-
-    private String message;
-
+    // HTTP 헤더에 삭제 요청 유저정보를 읽어서, service를 통해 자신의 채팅만 delete 할 수 있다.
 }

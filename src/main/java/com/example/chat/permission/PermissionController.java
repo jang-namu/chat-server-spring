@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/permission")
+@RequestMapping("/permissions")
 @RequiredArgsConstructor
 public class PermissionController {
     private final PermissionServiceImpl permissionService;
@@ -24,28 +24,19 @@ public class PermissionController {
 
     @PostMapping()
     public ResponseEntity<PermissionResponseDto> postPermission(@RequestBody PermissionRequestDto permissionRequestDto) {
-        PermissionResponseDto permissionResponseDto = permissionService.savePermission(
-                permissionRequestDto.getUid(),
-                permissionRequestDto.getRoomId(),
-                permissionRequestDto.getState()
-        );
+        PermissionResponseDto permissionResponseDto = permissionService.savePermission(permissionRequestDto);
         return ResponseEntity.status(HttpStatus.OK).body(permissionResponseDto);
     }
 
     @PutMapping()
     public ResponseEntity<PermissionResponseDto> putPermission(@RequestBody PermissionRequestDto permissionRequestDto) throws Exception {
-        PermissionResponseDto permissionResponseDto = permissionService.changePermission(
-                permissionRequestDto.getUid(),
-                permissionRequestDto.getRoomId(),
-                permissionRequestDto.getState());
+        PermissionResponseDto permissionResponseDto = permissionService.changePermission(permissionRequestDto);
 
         return ResponseEntity.status(HttpStatus.OK).body(permissionResponseDto);
     }
 
     @DeleteMapping()
     public void deletePermission(@RequestBody PermissionRequestDto permissionRequestDto) {
-        permissionService.deletePermission(
-                permissionRequestDto.getUid(),
-                permissionRequestDto.getRoomId());
+        permissionService.deletePermission(permissionRequestDto);
     }
 }

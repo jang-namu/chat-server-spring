@@ -3,11 +3,12 @@ package com.example.chat.chat;
 import com.example.chat.chat.dto.ChatDeleteRequestDto;
 import com.example.chat.chat.dto.ChatRequestDto;
 import com.example.chat.chat.dto.ChatResponseDto;
-import com.example.chat.group.Groups;
+import com.example.chat.group.Group;
 import com.example.chat.group.GroupRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -19,18 +20,17 @@ public class ChatServiceImpl {
     private final GroupRepository groupRepository;
 
     public List<ChatResponseDto> getAllByUid(Long uid) {
-        List<Groups> groupsList = groupRepository.findAllByUser_Id(uid);
+        List<Group> groupList = groupRepository.findAllByUser_Id(uid);
         List<ChatResponseDto> chatResponseDtoList = new ArrayList<>();
 
-        for (Groups groups : groupsList) {
-            List<Chat> chatList = chatRepository.findAllByGroups_Id(groups);
+        for (Group group : groupList) {
+            List<Chat> chatList = chatRepository.findAllByGroup_Id(group.getId());
             for (Chat chat : chatList) {
                 chatResponseDtoList.add(ChatResponseDto.builder()
                         .id(chat.getId())
-                        .gid(chat.getGroups().getId())
+                        .gid(chat.getGroup().getId())
                         .message(chat.getMessage())
                         .genTime(chat.getGenTime())
-                        .endDate(chat.getEndDate())
                         .build());
             }
         }
@@ -38,18 +38,17 @@ public class ChatServiceImpl {
     }
 
     public List<ChatResponseDto> getAllByRoomId(Long roomId) {
-        List<Groups> groupsList = groupRepository.findAllByChatRoom_Id(roomId);
+        List<Group> groupList = groupRepository.findAllByChatRoom_Id(roomId);
         List<ChatResponseDto> chatResponseDtoList = new ArrayList<>();
 
-        for (Groups groups : groupsList) {
-            List<Chat> chatList = chatRepository.findAllByGroups_Id(groups);
+        for (Group group : groupList) {
+            List<Chat> chatList = chatRepository.findAllByGroup_Id(group.getId());
             for (Chat chat : chatList) {
                 chatResponseDtoList.add(ChatResponseDto.builder()
                         .id(chat.getId())
-                        .gid(chat.getGroups().getId())
+                        .gid(chat.getGroup().getId())
                         .message(chat.getMessage())
                         .genTime(chat.getGenTime())
-                        .endDate(chat.getEndDate())
                         .build());
             }
         }
@@ -57,36 +56,43 @@ public class ChatServiceImpl {
     }
 
     public List<ChatResponseDto> getAllByUidAndRoomId(Long uid, Long roomId) {
-        Groups groups = groupRepository.findByUser_IdAndChatRoom_Id(uid, roomId);
+        Group group = groupRepository.findByUser_IdAndChatRoom_Id(uid, roomId);
         List<ChatResponseDto> chatResponseDtoList = new ArrayList<>();
 
-        List<Chat> chatList = chatRepository.findAllByGroups_Id(groups);
+        List<Chat> chatList = chatRepository.findAllByGroup_Id(group.getId());
         for (Chat chat : chatList) {
             chatResponseDtoList.add(ChatResponseDto.builder()
                     .id(chat.getId())
-                    .gid(chat.getGroups().getId())
+                    .gid(chat.getGroup().getId())
                     .message(chat.getMessage())
                     .genTime(chat.getGenTime())
-                    .endDate(chat.getEndDate())
                     .build());
         }
         return chatResponseDtoList;
     }
 
-    public ChatResponseDto saveChat(ChatRequestDto chatRequestDto) {
-        Chat chat = Chat.builder()
-                .message(chatRequestDto.getMessage())
-                .groups(chatRequestDto.getGroups())
-                .build();
+    public ChatResponseDto saveChat(ChatRequestDto chatRequestDto) throws Exception {
+        Optional<Group> selectedGroup = groupRepository.findById(chatRequestDto.getGid());
+
+        Chat chat;
+        if (selectedGroup.isPresent()) {
+            chat = Chat.builder()
+                    .message(chatRequestDto.getMessage())
+                    .group(selectedGroup.get())
+                    .genTime(LocalDateTime.now())
+                    .endDate(LocalDateTime.now().plusYears(1L))
+                    .build();
+        } else {
+            throw new Exception();
+        }
 
         Chat saveChat = chatRepository.save(chat);
 
         return ChatResponseDto.builder()
                 .id(saveChat.getId())
                 .message(saveChat.getMessage())
-                .gid(saveChat.getGroups().getId())
+                .gid(saveChat.getGroup().getId())
                 .genTime(saveChat.getGenTime())
-                .endDate(saveChat.getEndDate())
                 .build();
     }
 
@@ -96,13 +102,10 @@ public class ChatServiceImpl {
         Chat selectedChat;
         if (optionalChat.isPresent()) {
             selectedChat = optionalChat.get();
-            if (selectedChat.getGroups().getId() != chatDeleteRequestDto.getId()) {
-                throw new Exception();
-            }
+            chatRepository.deleteById(selectedChat.getId());
         } else {
             throw new Exception();
         }
 
-        chatRepository.deleteById(chatDeleteRequestDto.getId());
     }
 }

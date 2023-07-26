@@ -1,10 +1,9 @@
 package com.example.chat.permission;
 
-import com.example.chat.group.Groups;
+import com.example.chat.group.Group;
 import lombok.*;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 @Table(name = "permission_tb")
 @Entity
@@ -22,7 +21,7 @@ public class Permission {
     @MapsId
     @OneToOne
     @JoinColumn(name = "gid")
-    private Groups groups;
+    private Group group;
 
     private Byte state;
 

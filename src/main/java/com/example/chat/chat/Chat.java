@@ -1,7 +1,7 @@
 package com.example.chat.chat;
 
 
-import com.example.chat.group.Groups;
+import com.example.chat.group.Group;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,7 +23,7 @@ public class Chat {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "gid")
-    private Groups groups;
+    private Group group;
 
     private String message;
 

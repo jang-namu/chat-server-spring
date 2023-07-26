@@ -1,19 +1,18 @@
-package com.example.chat.chat.dto;
+package com.example.chat.group.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-
 @Builder
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChatRequestDto {
+public class GroupRequestDto {
 
-    private Long gid;
+    private Long uid;
 
-    private String message;
+    private Long roomId;
 
 }

@@ -3,8 +3,9 @@ package com.example.chat.chatroom;
 import com.example.chat.chatroom.dto.ChatRoomDeleteRequestDto;
 import com.example.chat.chatroom.dto.ChatRoomRequestDto;
 import com.example.chat.chatroom.dto.ChatRoomResponseDto;
-import com.example.chat.group.Groups;
+import com.example.chat.group.Group;
 import com.example.chat.group.GroupRepository;
+import com.example.chat.permission.dto.PermissionRequestDto;
 import com.example.chat.permission.dto.PermissionResponseDto;
 import com.example.chat.permission.PermissionServiceImpl;
 import com.example.chat.user.UserRepository;
@@ -68,12 +69,16 @@ public class ChatRoomServiceImpl {
                 .build();
 
         ChatRoom savedChatRoom = chatRoomRepository.save(chatRoom);
-        groupRepository.save(new Groups(savedChatRoom.getId(),
+        groupRepository.save(new Group(savedChatRoom.getId(),
                 userRepository.getById(chatRoomRequestDto.getAdminId()),
                 savedChatRoom));
 
         byte adminState = 1;    // enum 타입 사용?
-        permissionService.savePermission(savedChatRoom.getAdminId(), savedChatRoom.getId(), adminState);
+        permissionService.savePermission(PermissionRequestDto.builder()
+                .uid(savedChatRoom.getAdminId())
+                .roomId(savedChatRoom.getId())
+                .state((byte)1)
+                .build());
 
         return ChatRoomResponseDto.builder()
                 .id(savedChatRoom.getId())

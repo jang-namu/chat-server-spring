@@ -20,5 +20,4 @@ public class ChatResponseDto {
 
     private LocalDateTime genTime;
 
-    private LocalDateTime endDate;   // Date
 }

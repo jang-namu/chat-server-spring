@@ -1,7 +1,8 @@
 package com.example.chat.permission;
 
-import com.example.chat.group.Groups;
+import com.example.chat.group.Group;
 import com.example.chat.group.GroupRepository;
+import com.example.chat.permission.dto.PermissionRequestDto;
 import com.example.chat.permission.dto.PermissionResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,39 +17,50 @@ public class PermissionServiceImpl {
     private final GroupRepository groupRepository;
 
     public PermissionResponseDto getByUidAndRoomId(Long uid, Long roomId) {
-        Groups groups = groupRepository.findByUser_IdAndChatRoom_Id(uid, roomId);
+        Group group = groupRepository.findByUser_IdAndChatRoom_Id(uid, roomId);
 
-        Permission selectedPermission = permissionRepository.getById(groups.getId());
+        Permission selectedPermission = permissionRepository.getById(group.getId());
 
         return PermissionResponseDto.builder()
-                .gid(selectedPermission.getGroups().getId())
+                .gid(selectedPermission.getGroup().getId())
                 .state(selectedPermission.getState())
                 .build();
     }
 
-    public PermissionResponseDto savePermission(Long uid, Long roomId, Byte state) {
+
+
+    public PermissionResponseDto savePermission(PermissionRequestDto permissionRequestDto) {
         Permission savedPermission = permissionRepository.save(
                 Permission.builder()
-                        .groups(groupRepository.findByUser_IdAndChatRoom_Id(uid, roomId))
-                        .state(state)
+                        .group(
+                                groupRepository.findByUser_IdAndChatRoom_Id(
+                                        permissionRequestDto.getUid(),
+                                        permissionRequestDto.getRoomId()
+                                )
+                        )
+                        .state(permissionRequestDto.getState())
                         .build()
         );
 
         return PermissionResponseDto.builder()
-                .gid(savedPermission.getGroups().getId())
+                .gid(savedPermission.getGroup().getId())
                 .state(savedPermission.getState())
                 .build();
     }
 
-    public PermissionResponseDto changePermission(Long uid, Long roomId, Byte state) throws Exception {
-        Groups groups = groupRepository.findByUser_IdAndChatRoom_Id(uid, roomId);
 
-        Optional<Permission> changedPermission = permissionRepository.findById(groups.getId());
+
+    public PermissionResponseDto changePermission(PermissionRequestDto permissionRequestDto) throws Exception {
+        Group group = groupRepository.findByUser_IdAndChatRoom_Id(
+                permissionRequestDto.getUid(),
+                permissionRequestDto.getRoomId());
+
+        Optional<Permission> changedPermission = permissionRepository.findById(group.getId());
 
         Permission updatedPermission;
         if (changedPermission.isPresent()) {
             Permission permission = changedPermission.get();
-            permission.setState(state);
+            permission.setState(permission.getState());
 
             updatedPermission = permissionRepository.save(permission);
         } else {
@@ -56,13 +68,20 @@ public class PermissionServiceImpl {
         }
 
         return PermissionResponseDto.builder()
-                .gid(updatedPermission.getGroups().getId())
+                .gid(updatedPermission.getGroup().getId())
                 .state(updatedPermission.getState())
                 .build();
     }
 
-    public void deletePermission(Long uid, Long roomId) {
-        Groups groups = groupRepository.findByUser_IdAndChatRoom_Id(uid, roomId);
-        permissionRepository.deleteById(groups.getId());
+    public void deletePermission(PermissionRequestDto permissionRequestDto) {
+        if (permissionRequestDto.getState() != 1) {
+            return;
+        }
+
+        Group group = groupRepository.findByUser_IdAndChatRoom_Id(
+                permissionRequestDto.getUid(),
+                permissionRequestDto.getRoomId());
+
+        permissionRepository.deleteById(group.getId());
     }
 }

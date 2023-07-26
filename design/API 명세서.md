@@ -46,9 +46,9 @@
 
 | Index | Method | URI | Description | Req. Param. | Res. Param. | HTTP Status |
 | --- | --- | --- | --- | --- | --- | --- |
-| 1 | GET | /groups/{uid} | 유저 식별자로 포함된 그룹 조회 | uid: 유저아이디<br>(Long, required) |  |  |
-| 2 | GET | /groups/{roomId} | 채팅방 식별자로 포함된 그룹조회 | roomId: 채팅방아이디<br>(Long, required) |  |  |
-| 3 | GET | /groups/{uid}/{roomId} | 특정 유저, 특정 채팅방 그룹 조회 | uid: 유저아이디<br>(Long, required)<br>roomId: 채팅방아이디<br>(Long, required) |  |  |
+| 1 | GET | /group/{uid} | 유저 식별자로 포함된 그룹 조회 | uid: 유저아이디<br>(Long, required) |  |  |
+| 2 | GET | /group/{roomId} | 채팅방 식별자로 포함된 그룹조회 | roomId: 채팅방아이디<br>(Long, required) |  |  |
+| 3 | GET | /group/{uid}/{roomId} | 특정 유저, 특정 채팅방 그룹 조회 | uid: 유저아이디<br>(Long, required)<br>roomId: 채팅방아이디<br>(Long, required) |  |  |
 <br>
 
 ### Permission_tb

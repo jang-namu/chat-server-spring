@@ -11,19 +11,19 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/chat")
+@RequestMapping("/chats")
 @RequiredArgsConstructor
 public class ChatController {
 
     private final ChatServiceImpl chatService;
 
-    @GetMapping("/{uid}")
+    @GetMapping("/user/{uid}")
     public ResponseEntity<List<ChatResponseDto>> getChatByUid(@PathVariable Long uid) {
         List<ChatResponseDto> chatResponseDtos = chatService.getAllByUid(uid);
         return ResponseEntity.status(HttpStatus.OK).body(chatResponseDtos);
     }
 
-    @GetMapping("/{roomId}")
+    @GetMapping("/room/{roomId}")
     public ResponseEntity<List<ChatResponseDto>> getChatByRoomId(@PathVariable Long roomId) {
         List<ChatResponseDto> chatResponseDtos = chatService.getAllByRoomId(roomId);
         return ResponseEntity.status(HttpStatus.OK).body(chatResponseDtos);
@@ -38,13 +38,13 @@ public class ChatController {
     }
 
     @PostMapping()
-    public ResponseEntity<ChatResponseDto> postChat(@RequestBody ChatRequestDto chatRequestDto) {
+    public ResponseEntity<ChatResponseDto> postChat(@RequestBody ChatRequestDto chatRequestDto) throws Exception {
         ChatResponseDto chatResponseDto = chatService.saveChat(chatRequestDto);
         return ResponseEntity.status(HttpStatus.OK).body(chatResponseDto);
     }
 
 
-    @DeleteMapping("")
+    @DeleteMapping()
     public void deleteChat(@RequestBody ChatDeleteRequestDto chatDeleteRequestDto) throws Exception {
         chatService.delete(chatDeleteRequestDto);
     }
