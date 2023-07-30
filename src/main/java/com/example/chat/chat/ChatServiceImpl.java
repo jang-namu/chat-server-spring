@@ -1,6 +1,5 @@
 package com.example.chat.chat;
 
-import com.example.chat.chat.dto.ChatDeleteRequestDto;
 import com.example.chat.chat.dto.ChatRequestDto;
 import com.example.chat.chat.dto.ChatResponseDto;
 import com.example.chat.group.Group;
@@ -96,8 +95,8 @@ public class ChatServiceImpl {
                 .build();
     }
 
-    public void delete(ChatDeleteRequestDto chatDeleteRequestDto) throws Exception {
-        Optional<Chat> optionalChat = chatRepository.findById(chatDeleteRequestDto.getId());
+    public void delete(Long chatId) throws Exception {
+        Optional<Chat> optionalChat = chatRepository.findById(chatId);
 
         Chat selectedChat;
         if (optionalChat.isPresent()) {

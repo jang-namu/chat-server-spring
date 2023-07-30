@@ -17,8 +17,11 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class GroupServiceImpl {
+
     private final GroupRepository groupRepository;
+
     private final UserRepository userRepository;
+
     private final ChatRoomRepository chatRoomRepository;
 
     public List<GroupResponseDto> getGroupByUid(Long uid) {
@@ -55,10 +58,8 @@ public class GroupServiceImpl {
         return groupResponseDtos;
     }
 
-    public GroupResponseDto getGroupByUidAndRoomId(GroupRequestDto groupRequestDto) {
-        Group selectedGroup = groupRepository.findByUser_IdAndChatRoom_Id(
-                groupRequestDto.getUid(),
-                groupRequestDto.getRoomId());
+    public GroupResponseDto getGroupByUidAndRoomId(Long uid, Long roomId) {
+        Group selectedGroup = groupRepository.findByUser_IdAndChatRoom_Id(uid, roomId);
 
         GroupResponseDto groupResponseDto = GroupResponseDto.builder()
                 .id(selectedGroup.getId())

@@ -1,5 +1,6 @@
 package com.example.chat.user;
 
+import io.swagger.annotations.Api;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
